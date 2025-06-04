@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Gestión de Documentos del Proceso</h2>
+  <p><strong>Nombre del Proceso:</strong> {{ proceso.nombre }}</p>
+  <p><strong>Folio de Solicitud:</strong> {{ proceso.solicitud.folio }}</p>
+
+  <hr>
+
+  <!-- Subir documento -->
+  <form action="{{ url_for('documentos', id_proceso=proceso.id_proceso) }}" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="archivo" class="form-label">Subir nuevo documento:</label>
+      <input type="file" name="archivo" id="archivo" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-success">Subir Documento</button>
+  </form>
+
+  <hr>
+
+  <!-- Lista de documentos -->
+  <h4>Documentos Adjuntos</h4>
+  <ul class="list-group mt-3">
+    {% for archivo in archivos %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ archivo }}
+        <div class="btn-group">
+          <a href="{{ url_for('descargar_documento', nombre_archivo=archivo) }}" class="btn btn-outline-primary btn-sm">Descargar</a>
+          <a href="{{ url_for('ver_documento', nombre_archivo=archivo) }}" target="_blank" class="btn btn-outline-secondary btn-sm">Ver</a>
+        </div>
+      </li>
+    {% else %}
+      <li class="list-group-item">No hay documentos cargados aún.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

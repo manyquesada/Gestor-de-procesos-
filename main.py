@@ -1,12 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timedelta, date
+import os
 import uuid
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, timedelta
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'secreto'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost/gestor_procesos'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'documentos')
+
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 db = SQLAlchemy(app)
 
@@ -40,6 +45,19 @@ class Proceso(db.Model):
     estatus_proceso = db.Column(db.String(50))
 
     solicitud = db.relationship("Solicitud", backref="procesos")
+
+class DocumentoAdjunto(db.Model):
+    __tablename__ = 'documentos_adjuntos'
+    id_documento = db.Column(db.String(36), primary_key=True)
+    nombre_archivo = db.Column(db.String(255))
+    ruta_archivo = db.Column(db.Text)
+    tipo_contenido = db.Column(db.String(100))
+    tamano_archivo = db.Column(db.Integer)
+    fecha_subida = db.Column(db.DateTime)
+    id_proceso = db.Column(db.String(36), db.ForeignKey('procesos.id_proceso'))
+
+    proceso = db.relationship("Proceso", backref="documentos")
+
 
 def generar_folio():
     ult = Solicitud.query.order_by(Solicitud.folio.desc()).first()
@@ -158,6 +176,41 @@ def generar_proceso(id_solicitud):
 def gestion_procesos():
     procesos = Proceso.query.join(Solicitud).filter(Solicitud.estatus == 'aprobada').all()
     return render_template('gestion_procesos.html', procesos=procesos)
+
+@app.route('/procesos/<id_proceso>/documentos', methods=['GET', 'POST'])
+def documentos(id_proceso):
+    proceso = Proceso.query.get_or_404(id_proceso)
+    if request.method == 'POST':
+        archivo = request.files['archivo']
+        if archivo:
+            nombre_archivo = secure_filename(archivo.filename)
+            ruta = os.path.join(app.config['UPLOAD_FOLDER'], nombre_archivo)
+            archivo.save(ruta)
+            doc = DocumentoAdjunto(
+                id_documento=str(uuid.uuid4()),
+                nombre_archivo=nombre_archivo,
+                ruta_archivo=ruta,
+                tipo_contenido=archivo.content_type,
+                tamano_archivo=os.path.getsize(ruta),
+                fecha_subida=datetime.now(),
+                id_proceso=proceso.id_proceso
+            )
+            db.session.add(doc)
+            db.session.commit()
+            flash('Documento subido correctamente')
+            return redirect(url_for('documentos', id_proceso=id_proceso))
+
+    archivos = [doc.nombre_archivo for doc in proceso.documentos]
+    return render_template('documentos.html', proceso=proceso, archivos=archivos)
+
+@app.route('/descargar/<nombre_archivo>')
+def descargar_documento(nombre_archivo):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], nombre_archivo, as_attachment=True)
+
+@app.route('/ver_documento/<nombre_archivo>')
+def ver_documento(nombre_archivo):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], nombre_archivo)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

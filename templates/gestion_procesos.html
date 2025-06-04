@@ -31,7 +31,7 @@
                 <td>{{ p.fecha_registro.strftime('%Y-%m-%d %H:%M') }}</td>
                 <td>{{ p.estatus_proceso }}</td>
                 <td>
-                    <a href="#" class="btn btn-primary btn-sm">Ver Documentos</a>
+                    <a href="{{ url_for('documentos', id_proceso=p.id_proceso) }}" class="btn btn-primary btn-sm">Ver Documentos</a>
                 </td>
             </tr>
             {% endfor %}
