@@ -1,0 +1,115 @@
+/* === Fondo General === */
+body {
+  background: linear-gradient(to top right, #0f172a, #1e293b);
+  font-family: 'Segoe UI', sans-serif;
+  color: #fcf8f8;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* === Contenedor del Formulario === */
+.form-container {
+  background-color: #1e293b;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  width: 100%;
+  max-width: 500px;
+}
+
+/* === Título === */
+.form-container h1 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #aa2222;
+}
+
+/* === Estilos de Inputs === */
+input.form-control,
+textarea.form-control {
+  background-color: #0f172a; /* negro profundo */
+  color: #f8fafc; /* texto claro */
+  border: 1px solid #334155; /* borde gris oscuro */
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+input.form-control::placeholder,
+textarea.form-control::placeholder {
+  color: #64748b; /* placeholder gris */
+}
+
+input.form-control:focus,
+textarea.form-control:focus {
+  border-color: #3b82f6; /* azul al focus */
+  box-shadow: 0 0 10px #3b82f6;
+  background-color: #1e293b;
+  color: #ffffff;
+  outline: none;
+}
+
+/* === Etiquetas del formulario === */
+label.form-label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #cbd5e1;
+}
+
+/* === Botón Azul Neon === */
+.btn.neon-button {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  width: 100%;
+  transition: 0.3s ease-in-out;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
+}
+
+.btn.neon-button:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 0 16px #3b82f6, 0 0 32px #3b82f6 inset;
+  transform: scale(1.03);
+}
+
+/* === Botón Cancelar === */
+.btn-cancel {
+  background-color: #334155;
+  color: #e2e8f0;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  width: 100%;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-cancel:hover {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+/* === Espaciado entre botones === */
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* === Responsivo === */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 25px 20px;
+  }
+  .button-group {
+    flex-direction: column;
+  }
+}
