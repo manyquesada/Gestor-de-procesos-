@@ -40,16 +40,15 @@ class Solicitud(db.Model):
 
 class Proceso(db.Model):
     __tablename__ = 'procesos'
-    id_proceso = Column(String(36), primary_key=True)
-    nombre = Column(String(150))
-    descripcion = Column(Text)
-    id_solicitud = Column(String(36))
-    fecha_registro = Column(DateTime)
-    estatus_proceso = Column(String(50))
+    id_proceso = db.Column(db.String(36), primary_key=True)
+    nombre = db.Column(db.String(150))
+    descripcion = db.Column(db.Text)
+    id_solicitud = db.Column(db.String(36), db.ForeignKey('solicitudes.id_solicitud'))
+    fecha_registro = db.Column(db.DateTime)
+    estatus_proceso = db.Column(db.String(50))
 
-    def agregar(self):
-        db.session.add(self)
-        db.session.commit()
+    solicitud = db.relationship("Solicitud", backref="procesos")
+
 
 
 class DocumentoAdjunto(db.Model):

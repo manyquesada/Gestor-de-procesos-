@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Sistema de Solicitudes - Fido{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Gestión de Solicitudes - Fido</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Inicio</a>
+            <a href="{{ url_for('registro_solicitud') }}">Registrar Solicitud</a>
+            <a href="{{ url_for('gestion_solicitudes') }}">Gestión de Solicitudes</a>
+            <a href="{{ url_for('gestion_procesos') }}">Gestión de Procesos</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Fido - Departamento de Procesos</p>
+    </footer>
+</body>
+</html>
