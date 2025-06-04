@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestor de Solicitudes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+    <h1 class="mb-4">Listado de Solicitudes</h1>
+    <a href="{{ url_for('registroSolicitud') }}" class="btn btn-primary mb-3">Registrar nueva solicitud</a>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Folio</th>
+                <th>Descripción</th>
+                <th>Área</th>
+                <th>Responsable</th>
+                <th>Fecha de creación</th>
+                <th>Prioridad</th>
+                <th>Estatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in solicitudes %}
+            <tr>
+                <td>{{ s.folio }}</td>
+                <td>{{ s.descripcion }}</td>
+                <td>{{ s.tipo_area }}</td>
+                <td>{{ s.responsable_seguimiento }}</td>
+                <td>{{ s.fecha_creacion.strftime('%Y-%m-%d') }}</td>
+                <td>{{ s.prioridad or 'N/A' }}</td>
+                <td>{{ s.estatus }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">No hay solicitudes registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
