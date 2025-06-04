@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from modelo.dao import db, Solicitud
 from datetime import datetime
 import uuid
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost/gestor_procesos'
@@ -32,10 +33,29 @@ def registrar_solicitud():
     nueva.agregar()
     return redirect(url_for('gestion_solicitudes'))
 
+
+def dias_habiles_entre(fecha_inicio, fecha_fin):
+    dias = 0
+    while fecha_inicio < fecha_fin:
+        if fecha_inicio.weekday() < 5:  # Lunes a viernes
+            dias += 1
+        fecha_inicio += timedelta(days=1)
+    return dias
+
 @app.route('/gestionSolicitudes')
 def gestion_solicitudes():
     solicitudes = Solicitud.query.order_by(Solicitud.fecha_creacion.desc()).all()
+    hoy = datetime.now().date()
+
+    for solicitud in solicitudes:
+        if solicitud.estatus == 'pendiente' and solicitud.fecha_creacion:
+            dias = dias_habiles_entre(solicitud.fecha_creacion.date(), hoy)
+            if dias > 3:
+                solicitud.estatus = 'Pendiente Evaluación'
+
+    db.session.commit()
     return render_template('gestion_solicitudes.html', solicitudes=solicitudes)
+
 
 @app.route('/actualizarSolicitud', methods=['POST'])
 def actualizar_solicitud():
@@ -50,6 +70,13 @@ def actualizar_solicitud():
             fecha_aprobacion = request.form.get(f'fecha_aprobacion_{sid}')
             solicitud.fecha_aprobacion = datetime.strptime(fecha_aprobacion, '%Y-%m-%d') if fecha_aprobacion else None
             solicitud.estatus = 'aprobada' if 'aprobar' in accion else 'rechazada'
+
+            if 'rechazar' in accion:
+                solicitud.estatus = 'rechazada'
+                solicitud.aprobado_por = 'rechazado'
+
+
+           
     db.session.commit()
     return redirect(url_for('gestion_solicitudes'))
 

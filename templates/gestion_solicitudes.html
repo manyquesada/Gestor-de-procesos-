@@ -13,6 +13,8 @@
                 <tr>
                     <th>Folio</th>
                     <th>Descripción</th>
+                    <th>Área</th>
+                    <th>Responsable Seguimiento</th>
                     <th>Estatus</th>
                     <th>Prioridad</th>
                     <th>Aprobado Por</th>
@@ -23,14 +25,19 @@
             </thead>
             <tbody>
                 {% for solicitud in solicitudes %}
-                <tr>
+                <tr class="
+                    {% if solicitud.estatus == 'rechazada' %}table-danger
+                    {% elif solicitud.estatus == 'Pendiente Evaluación' %}table-warning
+                    {% endif %}">
                     <td>{{ solicitud.folio }}</td>
                     <td>{{ solicitud.descripcion }}</td>
+                    <td>{{ solicitud.tipo_area }}</td>
+                    <td>{{ solicitud.responsable_seguimiento }}</td>
                     <td>{{ solicitud.estatus }}</td>
                     <td>{{ solicitud.prioridad }}</td>
                     <td>
                         <input type="text" name="aprobado_por_{{ solicitud.id_solicitud }}" class="form-control"
-                               value="{{ solicitud.aprobado_por or '' }}">
+                               value="{% if solicitud.estatus == 'rechazada' %}rechazado{% else %}{{ solicitud.aprobado_por or '' }}{% endif %}">
                     </td>
                     <td>
                         <input type="text" name="retroalimentacion_{{ solicitud.id_solicitud }}" class="form-control"
