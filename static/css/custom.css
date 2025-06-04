@@ -1,0 +1,94 @@
+/* Colores base y tipografía */
+body {
+  background-color: #f4f6f9;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  color: #212529;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #003366;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.navbar a {
+  color: #f8f9fa;
+}
+
+/* Tablas */
+.table thead th {
+  background-color: #343a40;
+  color: white;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+}
+
+/* Botones personalizados */
+.btn-primary {
+  background-color: #004085;
+  border-color: #004085;
+}
+
+.btn-primary:hover {
+  background-color: #003067;
+  border-color: #002550;
+}
+
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Tarjetas y formularios */
+.card {
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+label {
+  font-weight: 500;
+}
+
+input[type="file"] {
+  background-color: #fff;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+/* Alertas */
+.alert {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Pie de página */
+.footer {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
