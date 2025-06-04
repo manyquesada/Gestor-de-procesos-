@@ -22,12 +22,12 @@ body {
 }
 
 /* === Título === */
-.form-container h1 {
+.form-box .form-title { /* Corrected selector to target the H2 with class form-title */
   text-align: center;
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 25px;
-  color: #aa2222;
+  color: #ffffff; /* Set to white */
 }
 
 /* === Estilos de Inputs === */
